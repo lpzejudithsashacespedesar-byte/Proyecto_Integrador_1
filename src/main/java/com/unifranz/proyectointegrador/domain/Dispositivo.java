@@ -22,4 +22,5 @@ public class Dispositivo {
     private String nombre;
     private String marca;
     private double precio;
+    private Boolean activo = true;
 }

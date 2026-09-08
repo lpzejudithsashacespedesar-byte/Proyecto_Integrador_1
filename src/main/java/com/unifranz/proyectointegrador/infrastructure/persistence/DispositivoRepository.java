@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface DispositivoRepository extends JpaRepository<Dispositivo, Long> {
     List<Dispositivo> findByMarcaIgnoreCase(String marca);
+    List<Dispositivo> findByActivoTrue();
+    List<Dispositivo> findByMarcaAndActivoTrue(String marca);
 }
