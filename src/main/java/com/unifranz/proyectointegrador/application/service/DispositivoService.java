@@ -1,4 +1,4 @@
-package com.unifranz.proyectointegrador.application.service;
+﻿package com.unifranz.proyectointegrador.application.service;
 
 import com.unifranz.proyectointegrador.application.dto.DispositivoDto;
 import java.util.List;
@@ -6,4 +6,6 @@ import java.util.List;
 public interface DispositivoService {
     DispositivoDto guardar(DispositivoDto dispositivoDto);
     List<DispositivoDto> listarPorMarca(String marca);
+    DispositivoDto editar(Long id, DispositivoDto dispositivoDto);
+    void eliminarLogico(Long id);
 }
