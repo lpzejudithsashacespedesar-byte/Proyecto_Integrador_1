@@ -1,4 +1,4 @@
-package com.unifranz.proyectointegrador.application.service.impl;
+﻿package com.unifranz.proyectointegrador.application.service.impl;
 
 import com.unifranz.proyectointegrador.application.dto.DispositivoDto;
 import com.unifranz.proyectointegrador.application.service.DispositivoService;
@@ -22,9 +22,10 @@ public class DispositivoServiceImpl implements DispositivoService {
         entidad.setNombre(dto.getNombre());
         entidad.setMarca(dto.getMarca());
         entidad.setPrecio(dto.getPrecio());
+        entidad.setActivo(true);
 
         Dispositivo guardado = dispositivoRepository.save(entidad);
-        return new DispositivoDto(guardado.getNombre(), guardado.getMarca(), guardado.getPrecio());
+        return convertirADto(guardado);
     }
 
     @Override
@@ -34,7 +35,40 @@ public class DispositivoServiceImpl implements DispositivoService {
                 : dispositivoRepository.findByMarcaIgnoreCase(marca);
 
         return lista.stream()
-                .map(d -> new DispositivoDto(d.getNombre(), d.getMarca(), d.getPrecio()))
+                .filter(Dispositivo::isActivo)
+                .map(this::convertirADto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public DispositivoDto editar(Long id, DispositivoDto dto) {
+        Dispositivo entidad = dispositivoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Dispositivo no encontrado con id: " + id));
+
+        entidad.setNombre(dto.getNombre());
+        entidad.setMarca(dto.getMarca());
+        entidad.setPrecio(dto.getPrecio());
+
+        Dispositivo actualizado = dispositivoRepository.save(entidad);
+        return convertirADto(actualizado);
+    }
+
+    @Override
+    public void eliminarLogico(Long id) {
+        Dispositivo entidad = dispositivoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Dispositivo no encontrado con id: " + id));
+
+        entidad.setActivo(false);
+        dispositivoRepository.save(entidad);
+    }
+
+    private DispositivoDto convertirADto(Dispositivo d) {
+        DispositivoDto dto = new DispositivoDto();
+        dto.setId(d.getId());
+        dto.setNombre(d.getNombre());
+        dto.setMarca(d.getMarca());
+        dto.setPrecio(d.getPrecio());
+        dto.setActivo(d.isActivo());
+        return dto;
     }
 }
