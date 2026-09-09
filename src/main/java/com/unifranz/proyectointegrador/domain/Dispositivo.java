@@ -22,5 +22,9 @@ public class Dispositivo {
     private String nombre;
     private String marca;
     private double precio;
+feature/servicio-logica
     private double activo = true; 
+=======
+    private Boolean activo = true;
+completar_crud_editar_eliminar
 }
